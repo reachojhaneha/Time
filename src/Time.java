@@ -31,6 +31,16 @@ public class Time {
 		}
 
 	}
+	
+	public static int isLeapYear(int month) {
+		boolean temp;
+		temp = ((year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0));
+		if (temp) {
+			return dd + 1;
+		}else {
+			return dd ;
+		}
+		}
 
 	public void positive_number(int number) {
 		int nextMonth;
@@ -38,21 +48,24 @@ public class Time {
 		int val;
 		int temp;
 		int n = number;// input number
-
-		while (n >= 30) {
+		
+		while (n >= mon_days(month)) {
 			nextMonth = month + 1;
 			val = mon_days(nextMonth);
 			temp = n - val;
 			n = temp;
 			month++;
 			// System.out.println(month);
+			if (dd == 31 && month == 12) {
+				reset();
 		}
-		if (n <= 30) {
+		if (n <= mon_days(month)) {
 			dd = dd + n;
 			if (dd > 30) {
 				month++;
 				dd = dd - mon_days(month);
-
+			
+			}
 			}
 		}
 		answer = dd + "/" + month + "/" + year;
@@ -61,6 +74,7 @@ public class Time {
 
 	public void zero_number(int number) {
 		String answer;
+		
 		answer = dd + "/" + month + "/" + year;
 		System.out.println(answer);
 
@@ -72,32 +86,41 @@ public class Time {
 		int val;
 		int temp;
 		int n = number;// input number
-		System.out.println(n);
-		while (n <= -30) {
+		//System.out.println(n);
+		
+		while (n <= -mon_days(month)) {
 			lastMonth = month - 1;
 			val = mon_days(lastMonth);
 			temp = n + val;
 			n = temp;
 			month--;
-		   System.out.println(month);
+		  // System.out.println(month);
 		}
-		if (n >= -30) {
+		if (n >= -mon_days(month)) {
 			lastMonth = month - 1;
-			val = dd - n;
-			System.out.println(dd);
-			if (val != 0) {
+			val = dd + n;
+			dd = val;
+			//System.out.println(dd);
+			if (val <= 0) {
 				month--;
 				dd = mon_days(lastMonth) + val;
 
 			}
-			dd = val;
+			
 		}
 		answer = dd + "/" + month + "/" + year;
 		System.out.println(answer);
 
 	}
 
+	public void reset() {
+		year = year + 1;
+		month = 1;
+		dd = 1;
+	}
+	
 	public int mon_days(int n) {
+		int temp;
 		Hashtable<Integer, Integer> mon = new Hashtable<Integer, Integer>();
 		mon.put(1, 31);
 		mon.put(2, 28);
@@ -111,6 +134,11 @@ public class Time {
 		mon.put(10, 31);
 		mon.put(11, 30);
 		mon.put(12, 31);
+		if(n == 2) {
+			temp = isLeapYear(year);
+			//days = mon.get(n);
+			return temp;
+		}
 		days = mon.get(n);
 		return days;
 	}
